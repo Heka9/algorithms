@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Lab #1</title>
+</head>
+<body>
+    <div class="wrapper">
+
+        <h1>Welcome to algorithms!</h1>
+
+        <div class="input-field">
+            <div class="user-bar">
+                <h2>User array generation</h2>
+                <div class="input-container">
+                    <input id="user-input-checkbox" value="true" class="input" type="checkbox">
+                    <label for="user-input-checkbox">Click here to use data below</label>
+                </div>
+                <div class="some-wrapper">
+                    <div class="input-container">
+                        <input id="input-array" class="input" type="text" autocomplete="off" placeholder="Enter data..." disabled>
+                        <label for="input-array">Enter only numbers, use comma as separator</label>
+                    </div>
+                </div>
+                <p class="user-array">User array: <span></span></p>
+            </div>
+            <div class="random-bar">
+                <h2>Random array generation</h2>
+                <div class="input-container">
+                    <input id="random-input-checkbox" value="true" class="input" type="checkbox">
+                    <label for="random-input-checkbox">Click here to use data below</label>
+                </div>
+                <div class="input-container">
+                    <input id="input-min-value" class="input" type="number" value="0" disabled>
+                    <label for="input-min-value">Enter min array value</label>
+                </div>
+                <div class="input-container">
+                    <input id="input-max-value" class="input" type="number" value="50" disabled>
+                    <label for="input-max-value">Enter max array value</label>
+                </div>
+                <div class="input-container">
+                    <input id="input-length" class="input" type="number" value="10" disabled>
+                    <label for="input-length">Enter array length</label>
+                </div>
+                <div>
+                    <button id="generate-button" class="button" disabled>Generate array</button>
+                </div>
+                <p class="random-array">Random array: <span></span></p>
+            </div>
+        </div>
+        
+        <div class="error"></div>
+
+        <div class="menu">
+            <button id="bubble-sort" class="button">Use bubble sort</button>
+            <button id="shaker-sort" class="button">Use shaker sort</button>
+            <button id="odd-even-sort" class="button">Use odd-even sort</button>
+            <button id="comb-sort" class="button">Use comb sort</button>
+            <button id="reset" class="button">Reset all data</button>
+        </div>
+
+        <div class="output-field">
+            <p class="sorted-array">Result: <span></span></p>
+            <p class="iterations">Array was sorted by <span></span></p>
+        </div>
+
+    </div>
+</body>
+<script src="script.js"></script>
+</html>
