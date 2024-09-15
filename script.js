@@ -19,7 +19,7 @@ function sortArrayWithMethod(sortMethod) {
     }
     if (result) {
         sortedArrayParagraph.textContent = result.array.join(',\n');
-        iterationsCounterParagraph.textContent = `${result.swapQ} swaps and used ${result.iterationsQ} iterations`;
+        iterationsCounterParagraph.textContent = `${result.swapQ} swaps and used ${result.iterationsQ} iterations. Algorithm time is ${result.performanceTime} ms`;
     }
 }
 function checkFlags() {
@@ -51,11 +51,13 @@ function resetData () {
 }
 
 function bubbleSort (array){
+	const startTime = performance.now();
     let iterationsQ = 0;
     let swapQ = 0
+	let wasSwap = false;
 
     for (let i = 0; i < array.length; i++){
-        let wasSwap = false;
+		wasSwap = false;
 
         for (let j = 0; j < array.length - i - 1; j++){
             iterationsQ++
@@ -67,10 +69,13 @@ function bubbleSort (array){
         }
         if(!wasSwap) break
     }
+	const endTime = performance.now();
+	const performanceTime = endTime - startTime;
 
-    return {array, swapQ, iterationsQ}
+    return {array, swapQ, iterationsQ, performanceTime};
 }
 function shakerSort (array){
+	const startTime = performance.now();
     let left = 0;
     let right = array.length - 1;
     let wasSwap = true;
@@ -100,9 +105,13 @@ function shakerSort (array){
         }
         left++;
     }
-    return {array, swapQ, iterationsQ};
+	const endTime = performance.now();
+	const performanceTime = endTime - startTime;
+
+    return {array, swapQ, iterationsQ, performanceTime};
 }
 function oddEvenSort (array){
+	const startTime = performance.now();
     let wasSwap = true;
     let iterationsQ = 0;
     let swapQ = 0
@@ -127,10 +136,13 @@ function oddEvenSort (array){
             }
         }
     }
+	const endTime = performance.now();
+	const performanceTime = endTime - startTime;
 
-    return {array, swapQ, iterationsQ};
+    return {array, swapQ, iterationsQ, performanceTime};
 }
 function combSort (array){
+	const startTime = performance.now();
     const factor = 1.247;
     let gap = array.length;
     let wasSwap = true;
@@ -151,7 +163,10 @@ function combSort (array){
             }
         }
     }
-    return {array, swapQ, iterationsQ};
+	const endTime = performance.now();
+	const performanceTime = endTime - startTime;
+
+    return {array, swapQ, iterationsQ, performanceTime};
 }
 
 const randomArrayFlag = document.getElementById('random-input-checkbox');
