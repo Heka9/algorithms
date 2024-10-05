@@ -43,11 +43,17 @@ function resetData () {
     randomArrayParagraph.textContent = '';
     userArrayParagraph.textContent = '';
     userInput.value = '';
+    errorMsg.textContent = '';
+
     userArrayFlag.checked = false;
     randomArrayFlag.checked = false;
-    errorMsg.textContent = '';
+
     randomArray = [];
     userArray = [];
+
+    document.getElementById("input-min-value").value = '0';
+    document.getElementById("input-max-value").value = '50';
+    document.getElementById("input-length").value = '10';
 }
 
 function bubbleSort (array){
@@ -168,6 +174,86 @@ function combSort (array){
 
     return {array, swapQ, iterationsQ, performanceTime};
 }
+function insertionSort (array){
+    const startTime = performance.now();
+    let iterationsQ = 0;
+    let swapQ = 0
+
+    for (let i = 1; i < array.length; i++) {
+        const current = array[i];
+        let j = i - 1;
+        iterationsQ++
+
+        while (j >= 0 && array[j] > current) {
+            array[j + 1] = array[j]
+            j--;
+            iterationsQ++
+            swapQ++
+        }
+        array[j + 1] = current;
+    }
+
+    const endTime = performance.now();
+    const performanceTime = endTime - startTime;
+
+    return {array, swapQ, iterationsQ, performanceTime};
+}
+function selectionSort (array){
+    const startTime = performance.now();
+    let iterationsQ = 0;
+    let swapQ = 0;
+
+    for (let i = 0; i < array.length - 1; i++) {
+        let indexMin = i;
+
+        for (let j = i + 1; j < array.length; j++) {
+            iterationsQ++
+            if (array[indexMin] > array[j]) {
+                indexMin = j;
+            }
+        }
+
+        if (indexMin !== i) {
+            swapElements (array, i, indexMin)
+            swapQ++
+        }
+
+    }
+
+    const endTime = performance.now();
+    const performanceTime = endTime - startTime;
+
+    return {array, swapQ, iterationsQ, performanceTime};
+}
+function merge(array1, array2, counters) {
+    const results = []
+    let i = 0
+    let j = 0
+
+    while (i < array1.length && j < array2.length) {
+        counters.iterationsQ++;
+        if (array1[i] < array2[j]) {
+            results.push(array1[i++])
+        } else {
+            results.push(array2[j++])
+        }
+        counters.swapQ++;
+    }
+
+    return results.concat(array1.slice(i), array2.slice(j))
+}
+function mergeSort(array, counters = { iterationsQ: 0, swapQ: 0 }) {
+
+    if (array.length < 2) return { array: array, swapQ: counters.swapQ, iterationsQ: counters.iterationsQ };
+
+    const middle = Math.floor(array.length / 2)
+    const arrayLeft = array.slice(0, middle)
+    const arrayRight = array.slice(middle, array.length)
+
+    const sortedArray =  merge(mergeSort(arrayLeft, counters).array, mergeSort(arrayRight, counters).array,counters)
+
+    return {array: sortedArray, swapQ: counters.swapQ, iterationsQ: counters.iterationsQ};
+}
 
 const randomArrayFlag = document.getElementById('random-input-checkbox');
 const userArrayFlag = document.getElementById('user-input-checkbox');
@@ -179,6 +265,9 @@ const bubbleSortButton= document.getElementById('bubble-sort');
 const shakerSortButton= document.getElementById('shaker-sort');
 const oddEvenSortButton= document.getElementById('odd-even-sort');
 const combSortButton= document.getElementById('comb-sort');
+const insertionSortButton= document.getElementById('insertion-sort');
+const selectionSortButton= document.getElementById('selection-sort');
+const mergeSortButton= document.getElementById('merge-sort');
 const resetButton= document.getElementById('reset');
 
 const sortedArrayParagraph = document.querySelector(".sorted-array span")
@@ -237,4 +326,13 @@ oddEvenSortButton.addEventListener('click', () => {
 })
 combSortButton.addEventListener('click', () => {
     sortArrayWithMethod(combSort)
+})
+insertionSortButton.addEventListener('click', () => {
+    sortArrayWithMethod(insertionSort)
+})
+selectionSortButton.addEventListener('click', () => {
+    sortArrayWithMethod(selectionSort)
+})
+mergeSortButton.addEventListener('click', () => {
+    sortArrayWithMethod(mergeSort)
 })
