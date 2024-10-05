@@ -313,6 +313,51 @@ function quickSort (array, counters = { iterationsQ: 0, swapQ: 0 }){
 
     return {array: sortedArray, swapQ: counters.swapQ, iterationsQ: counters.iterationsQ};
 }
+function iterativeQuickSort (array){
+    let iterationsQ = 0;
+    let swapQ = 0;
+    const stack = [];
+
+    stack.push([0, array.length - 1]);
+
+    while (stack.length > 0) {
+        const [start, end] = stack.pop();
+        iterationsQ++;
+
+        if (start >= end) {
+            continue;
+        }
+
+        const pivotIndex = Math.floor((start + end) / 2);
+        const pivot = array[pivotIndex];
+        const smaller = [];
+        const bigger = [];
+
+        for (let i = start; i <= end; i++) {
+            iterationsQ++;
+            if (i === pivotIndex) continue;
+
+            if (array[i] > pivot) {
+                bigger.push(array[i]);
+                swapQ++;
+            } else {
+                smaller.push(array[i]);
+                swapQ++;
+            }
+        }
+
+        const sortedArray = [...smaller, pivot, ...bigger];
+
+        for (let i = 0; i < sortedArray.length; i++) {
+            array[start + i] = sortedArray[i];
+        }
+
+        stack.push([start, start + smaller.length - 1]);
+        stack.push([start + smaller.length + 1, end]);
+    }
+
+    return { array, swapQ, iterationsQ };
+}
 
 const randomArrayFlag = document.getElementById('random-input-checkbox');
 const userArrayFlag = document.getElementById('user-input-checkbox');
@@ -329,6 +374,7 @@ const selectionSortButton= document.getElementById('selection-sort');
 const mergeSortButton= document.getElementById('merge-sort');
 const shellSortButton= document.getElementById('shell-sort');
 const quickSortButton= document.getElementById('quick-sort');
+const iterativeQuickSortButton= document.getElementById('iterative-quick-sort');
 const resetButton= document.getElementById('reset');
 
 const sortedArrayParagraph = document.querySelector(".sorted-array span")
@@ -403,3 +449,7 @@ shellSortButton.addEventListener('click', () => {
 quickSortButton.addEventListener('click', () => {
     sortArrayWithMethod(quickSort)
 })
+iterativeQuickSortButton.addEventListener('click', () => {
+    sortArrayWithMethod(iterativeQuickSort)
+})
+
