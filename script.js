@@ -232,17 +232,20 @@ function merge(array1, array2, counters) {
 
     while (i < array1.length && j < array2.length) {
         counters.iterationsQ++;
+
         if (array1[i] < array2[j]) {
             results.push(array1[i++])
+            counters.swapQ++;
         } else {
             results.push(array2[j++])
+            counters.swapQ++;
         }
-        counters.swapQ++;
     }
 
     return results.concat(array1.slice(i), array2.slice(j))
 }
 function mergeSort(array, counters = { iterationsQ: 0, swapQ: 0 }) {
+    counters.iterationsQ++;
 
     if (array.length < 2) return { array: array, swapQ: counters.swapQ, iterationsQ: counters.iterationsQ };
 
@@ -250,7 +253,63 @@ function mergeSort(array, counters = { iterationsQ: 0, swapQ: 0 }) {
     const arrayLeft = array.slice(0, middle)
     const arrayRight = array.slice(middle, array.length)
 
-    const sortedArray =  merge(mergeSort(arrayLeft, counters).array, mergeSort(arrayRight, counters).array,counters)
+    const sortedArray = merge(mergeSort(arrayLeft, counters).array, mergeSort(arrayRight, counters).array,counters)
+
+    return {array: sortedArray, swapQ: counters.swapQ, iterationsQ: counters.iterationsQ};
+}
+function shellSort (array){
+    const startTime = performance.now();
+    let iterationsQ = 0;
+    let swapQ = 0
+
+    let gap = Math.floor(array.length / 2);
+
+    while (gap >= 1) {
+        for (let i = gap; i < array.length; i++) {
+            const current = array[i];
+            let j = i;
+            iterationsQ++;
+
+            while (j >= gap && array[j - gap] > current) {
+                array[j] = array[j - gap];
+                j -= gap;
+                swapQ++;
+            }
+            array[j] = current;
+        }
+        gap = Math.floor(gap / 2);
+    }
+
+    const endTime = performance.now();
+    const performanceTime = endTime - startTime;
+
+    return {array, swapQ, iterationsQ, performanceTime};
+}
+function quickSort (array, counters = { iterationsQ: 0, swapQ: 0 }){
+    counters.iterationsQ++;
+
+    if (array.length <= 1) {
+        return {array: array, swapQ: counters.swapQ, iterationsQ: counters.iterationsQ};
+    }
+    const pivotIndex = Math.floor(array.length / 2)
+    const pivot = array[pivotIndex];
+    const bigger = []
+    const smaller = []
+
+    for (let i = 0; i < array.length; i++) {
+        counters.iterationsQ++;
+        if (i === pivotIndex) continue;
+
+        if (array[i] > pivot) {
+            bigger.push(array[i])
+            counters.swapQ++;
+        } else {
+            smaller.push(array[i])
+            counters.swapQ++;
+        }
+    }
+
+    const sortedArray = [...quickSort(smaller, counters).array, pivot, ...quickSort(bigger, counters).array]
 
     return {array: sortedArray, swapQ: counters.swapQ, iterationsQ: counters.iterationsQ};
 }
@@ -268,6 +327,8 @@ const combSortButton= document.getElementById('comb-sort');
 const insertionSortButton= document.getElementById('insertion-sort');
 const selectionSortButton= document.getElementById('selection-sort');
 const mergeSortButton= document.getElementById('merge-sort');
+const shellSortButton= document.getElementById('shell-sort');
+const quickSortButton= document.getElementById('quick-sort');
 const resetButton= document.getElementById('reset');
 
 const sortedArrayParagraph = document.querySelector(".sorted-array span")
@@ -335,4 +396,10 @@ selectionSortButton.addEventListener('click', () => {
 })
 mergeSortButton.addEventListener('click', () => {
     sortArrayWithMethod(mergeSort)
+})
+shellSortButton.addEventListener('click', () => {
+    sortArrayWithMethod(shellSort)
+})
+quickSortButton.addEventListener('click', () => {
+    sortArrayWithMethod(quickSort)
 })
